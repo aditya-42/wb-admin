@@ -10,46 +10,48 @@ export default function LandingPage() {
       <Header />
       <main className="container mx-auto px-4 py-20 space-y-20">
         <section className="text-center space-y-6">
-          <h1 className="text-4xl font-bold">Welcome to Shadcn Landing</h1>
-          <p className="text-muted-foreground">Build beautiful UIs with Next.js and shadcn/ui.</p>
-          <Button size="lg">Get Started</Button>
+          <h1 className="text-4xl font-bold">WorldBridge Mobile</h1>
+          <p className="text-muted-foreground">
+            Manage incident reports from anywhere with our mobile companion app.
+          </p>
+          <Button size="lg">Download Now</Button>
         </section>
         <section id="features" className="grid md:grid-cols-3 gap-6">
           <Card className="text-center">
             <CardHeader>
-              <CardTitle>Easy to Use</CardTitle>
-              <CardDescription>Components built with Tailwind CSS</CardDescription>
+              <CardTitle>Manage On&nbsp;the&nbsp;Go</CardTitle>
+              <CardDescription>Review reports from your phone</CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
-              Create consistent interfaces quickly.
+              Stay connected even when you&#39;re away from the desk.
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardHeader>
-              <CardTitle>Responsive</CardTitle>
-              <CardDescription>Works on all devices</CardDescription>
+              <CardTitle>Realtime Alerts</CardTitle>
+              <CardDescription>Get notified instantly</CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
-              Layout adapts to any screen size.
+              Receive push notifications for new reports.
             </CardContent>
           </Card>
           <Card className="text-center">
             <CardHeader>
-              <CardTitle>Open Source</CardTitle>
-              <CardDescription>MIT licensed components</CardDescription>
+              <CardTitle>Secure Access</CardTitle>
+              <CardDescription>Your data is protected</CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
-              Customize them to fit your needs.
+              Built with modern security best practices.
             </CardContent>
           </Card>
         </section>
         <section id="about" className="space-y-4">
           <h2 className="text-2xl font-bold">About</h2>
-          <p>Shadcn Landing is a demo project using shadcn/ui with Next.js 15.</p>
+          <p>WorldBridge Mobile complements this admin portal, allowing field agents to submit and track reports effortlessly.</p>
         </section>
         <section id="contact" className="space-y-4">
           <h2 className="text-2xl font-bold">Contact</h2>
-          <p>Email us at contact@example.com.</p>
+          <p>Reach us at support@worldbridge.app.</p>
         </section>
       </main>
       <Footer />

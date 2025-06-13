@@ -16,9 +16,14 @@ export default function Header() {
           <Link href="#contact" className="hover:underline">Contact</Link>
           <Button size="sm">Get Started</Button>
         </nav>
-        <button className="md:hidden" onClick={() => setOpen(!open)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setOpen(!open)}
+        >
           <Menu />
-        </button>
+        </Button>
       </div>
       {open && (
         <div className="md:hidden border-t bg-background">

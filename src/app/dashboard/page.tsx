@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ReportsTabs from "./ReportsTabs";
 import { supabase } from "@/lib/supabaseClient";
 
 async function fetchReports() {
@@ -26,45 +26,43 @@ async function fetchReports() {
     title: r.report_header,
   }));
 
-  const all = [...taggedBusiness, ...taggedIndividual];
-
   return {
-    approved: all.filter((r) => r.verified === true),
-    unapproved: all.filter((r) => r.verified === false),
+    all: [...taggedBusiness, ...taggedIndividual],
+    business: taggedBusiness,
+    individual: taggedIndividual,
   };
 }
 
-export default async function DashboardPage() {
-  const { approved, unapproved } = await fetchReports();
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams?: { tab?: string; category?: string };
+}) {
+  const { all, business, individual } = await fetchReports();
+  const category =
+    searchParams?.category === "business"
+      ? "business"
+      : searchParams?.category === "individual"
+        ? "individual"
+        : "all";
+  const reports =
+    category === "business"
+      ? business
+      : category === "individual"
+        ? individual
+        : all;
+  const approved = reports.filter((r) => r.verified === true);
+  const unapproved = reports.filter((r) => r.verified === false);
+  const tab = searchParams?.tab === "verified" ? "verified" : "unverified";
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Unapproved Reports</h2>
-        <ul className="space-y-2">
-          {unapproved.map((r) => (
-            <li key={`${r.id}-${r.type}`}>
-              <Link
-                href={`/reports/${r.type}/${r.id}`}
-                className="text-blue-600 underline"
-              >
-                {r.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Approved Reports</h2>
-        <ul className="space-y-2">
-          {approved.map((r) => (
-            <li key={`${r.id}-${r.type}`}>{r.title}</li>
-          ))}
-        </ul>
-      </section>
+    <div className="space-y-8">
+      <h1 className="text-2xl font-bold mb-4 capitalize">{category} Reports</h1>
+      <ReportsTabs
+        approved={approved}
+        unapproved={unapproved}
+        initialTab={tab as "verified" | "unverified"}
+      />
     </div>
   );
 }
