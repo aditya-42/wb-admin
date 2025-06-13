@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import ReportsTabs from "./ReportsTabs";
 import { supabase } from "@/lib/supabaseClient";
 
 async function fetchReports() {
@@ -35,42 +34,22 @@ async function fetchReports() {
   };
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams?: { tab?: string };
+}) {
   const { approved, unapproved } = await fetchReports();
+  const tab = searchParams?.tab === "verified" ? "verified" : "unverified";
 
   return (
     <div className="space-y-8">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-
-      <section id="unverified" className="space-y-4">
-        <h2 className="text-xl font-semibold">Unverified Reports</h2>
-        <div className="space-y-2">
-          {unapproved.map((r) => (
-            <Card key={`${r.id}-${r.type}`}>
-              <CardHeader>
-                <CardTitle>
-                  <Link href={`/reports/${r.type}/${r.id}`} className="hover:underline">
-                    {r.title}
-                  </Link>
-                </CardTitle>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section id="verified" className="space-y-4">
-        <h2 className="text-xl font-semibold">Verified Reports</h2>
-        <div className="space-y-2">
-          {approved.map((r) => (
-            <Card key={`${r.id}-${r.type}`}>
-              <CardHeader>
-                <CardTitle>{r.title}</CardTitle>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
-      </section>
+      <ReportsTabs
+        approved={approved}
+        unapproved={unapproved}
+        initialTab={tab as "verified" | "unverified"}
+      />
     </div>
   );
 }
