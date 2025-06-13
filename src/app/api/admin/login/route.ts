@@ -7,8 +7,9 @@ export async function POST(req: Request) {
   try {
     await loginAdmin(email, password);
     return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error("Login Error:", err.message);
-    return NextResponse.json({ error: err.message }, { status: 401 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error("Login Error:", message);
+    return NextResponse.json({ error: message }, { status: 401 });
   }
 }

@@ -1,13 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 
-interface ReportDetailProps {
-  params: {
-    type: string;
-    id: string;
-  };
-}
-
-export default async function ReportDetail({ params }: ReportDetailProps) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function ReportDetail({ params }: any) {
   const { type, id } = params;
 
   const table = type === "business" ? "business_reports" : "individual_reports";

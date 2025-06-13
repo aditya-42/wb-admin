@@ -28,7 +28,8 @@ export async function loginAdmin(email: string, password: string) {
     throw new Error("Invalid email or password");
   }
 
-  cookies().set(
+  const cookieStore = await cookies();
+  cookieStore.set(
     SESSION_KEY,
     JSON.stringify({ id: admin.id, email: admin.email }),
     {
