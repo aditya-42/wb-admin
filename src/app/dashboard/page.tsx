@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabaseClient";
 
 async function fetchReports() {
@@ -38,32 +39,37 @@ export default async function DashboardPage() {
   const { approved, unapproved } = await fetchReports();
 
   return (
-    <div className="p-6">
+    <div className="space-y-8">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Unapproved Reports</h2>
-        <ul className="space-y-2">
+      <section id="unverified" className="space-y-4">
+        <h2 className="text-xl font-semibold">Unverified Reports</h2>
+        <div className="space-y-2">
           {unapproved.map((r) => (
-            <li key={`${r.id}-${r.type}`}>
-              <Link
-                href={`/reports/${r.type}/${r.id}`}
-                className="text-blue-600 underline"
-              >
-                {r.title}
-              </Link>
-            </li>
+            <Card key={`${r.id}-${r.type}`}>
+              <CardHeader>
+                <CardTitle>
+                  <Link href={`/reports/${r.type}/${r.id}`} className="hover:underline">
+                    {r.title}
+                  </Link>
+                </CardTitle>
+              </CardHeader>
+            </Card>
           ))}
-        </ul>
+        </div>
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Approved Reports</h2>
-        <ul className="space-y-2">
+      <section id="verified" className="space-y-4">
+        <h2 className="text-xl font-semibold">Verified Reports</h2>
+        <div className="space-y-2">
           {approved.map((r) => (
-            <li key={`${r.id}-${r.type}`}>{r.title}</li>
+            <Card key={`${r.id}-${r.type}`}>
+              <CardHeader>
+                <CardTitle>{r.title}</CardTitle>
+              </CardHeader>
+            </Card>
           ))}
-        </ul>
+        </div>
       </section>
     </div>
   );

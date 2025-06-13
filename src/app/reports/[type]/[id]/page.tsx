@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function ReportDetail({ params }: any) {
@@ -21,15 +22,21 @@ export default async function ReportDetail({ params }: any) {
   );
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Report Details</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {filtered.map(([key, value]) => (
-          <div key={key}>
-            <strong className="capitalize">{key.replace(/_/g, " ")}:</strong>
-            <p className="text-gray-800">{value?.toString() || "N/A"}</p>
-          </div>
+          <Card key={key}>
+            <CardHeader>
+              <CardTitle className="capitalize">
+                {key.replace(/_/g, " ")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>{value?.toString() || "N/A"}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
