@@ -1,27 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button, Card, Flex, Heading, TextField, Text } from "@radix-ui/themes";
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Submitting:", { email, password });
-
+  const onSubmit = async (data: FormData) => {
     const res = await fetch("/api/admin/login", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify(data),
     });
 
     if (res.ok) {
       window.location.href = "/dashboard";
     } else {
       const { error } = await res.json();
-      setError(error);
+      setError("root", { type: "server", message: error });
     }
   };
 
@@ -29,7 +34,7 @@ export default function LoginPage() {
     <div className="grid min-h-screen md:grid-cols-2">
       <div className="flex items-center justify-center p-8">
         <Card className="w-full max-w-sm p-6">
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Flex direction="column" gap="3">
               <Heading as="h1" size="4" align="center">
                 Admin Login
@@ -37,20 +42,26 @@ export default function LoginPage() {
               <TextField.Root
                 type="email"
                 placeholder="Email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register("email", { required: "Email is required" })}
               />
+              {errors.email && (
+                <Text color="red" size="2">
+                  {errors.email.message}
+                </Text>
+              )}
               <TextField.Root
                 type="password"
                 placeholder="Password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password", { required: "Password is required" })}
               />
-              {error && (
+              {errors.password && (
                 <Text color="red" size="2">
-                  {error}
+                  {errors.password.message}
+                </Text>
+              )}
+              {errors.root && (
+                <Text color="red" size="2">
+                  {errors.root.message}
                 </Text>
               )}
               <Button type="submit" className="w-full">
