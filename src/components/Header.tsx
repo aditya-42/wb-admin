@@ -3,19 +3,42 @@ import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 
 export default function Header() {
   const [open, setOpen] = useState(false)
   return (
     <header className="w-full bg-background sticky top-0 z-50 border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold">Shadcn Landing</Link>
-        <nav className="hidden md:flex gap-6 items-center">
-          <Link href="#features" className="hover:underline">Features</Link>
-          <Link href="#about" className="hover:underline">About</Link>
-          <Link href="#contact" className="hover:underline">Contact</Link>
-          <Button size="sm">Get Started</Button>
-        </nav>
+        <Link href="/" className="text-lg font-bold">Radix Landing</Link>
+        <NavigationMenu.Root className="hidden md:block">
+          <NavigationMenu.List className="flex gap-6 items-center">
+            <NavigationMenu.Item>
+              <NavigationMenu.Link asChild>
+                <Link href="#features" className="hover:underline">
+                  Features
+                </Link>
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Link asChild>
+                <Link href="#about" className="hover:underline">
+                  About
+                </Link>
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Link asChild>
+                <Link href="#contact" className="hover:underline">
+                  Contact
+                </Link>
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <Button size="sm">Get Started</Button>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
         <button className="md:hidden" onClick={() => setOpen(!open)}>
           <Menu />
         </button>
