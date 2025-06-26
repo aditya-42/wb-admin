@@ -11,17 +11,10 @@ export async function loginAdmin(email: string, password: string) {
     .eq("email", email)
     .single();
 
-  console.log("Supabase error:", error);
-  console.log("Supabase admin:", admin);
-
   if (error || !admin) {
     throw new Error("Invalid email or password 2");
   }
 
-  console.log("Admin from DB:", admin);
-
-  console.log("🔍 Raw input password:", password);
-  console.log("🔐 Hashed password from DB:", admin.password);
 
   const isValid = await bcrypt.compare(password, admin.password);
   if (!isValid) {
