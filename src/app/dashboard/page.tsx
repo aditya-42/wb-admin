@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabaseClient";
+import { getCurrentAdmin } from "@/lib/auth";
 
 async function fetchReports() {
   const { data: business } = await supabase
@@ -27,25 +28,47 @@ async function fetchReports() {
     title: r.report_header,
   }));
 
-  const all = [...taggedBusiness, ...taggedIndividual];
+  const combine = <T extends { verified: boolean }>(items: T[]) => ({
+    approved: items.filter((r) => r.verified === true),
+    unapproved: items.filter((r) => r.verified === false),
+  });
 
   return {
-    approved: all.filter((r) => r.verified === true),
-    unapproved: all.filter((r) => r.verified === false),
+    all: combine([...taggedBusiness, ...taggedIndividual]),
+    business: combine(taggedBusiness),
+    individual: combine(taggedIndividual),
   };
 }
 
-export default async function DashboardPage() {
-  const { approved, unapproved } = await fetchReports();
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams?: { tab?: string };
+}) {
+  const tab = searchParams?.tab ?? "all";
+
+  if (tab === "profile") {
+    const admin = await getCurrentAdmin();
+    return (
+      <div className="space-y-4">
+        <h1 className="text-2xl font-bold mb-4">Profile</h1>
+        <p>Email: {admin?.email}</p>
+      </div>
+    );
+  }
+
+  const { all, business, individual } = await fetchReports();
+  const data =
+    tab === "business" ? business : tab === "individual" ? individual : all;
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl font-bold mb-4 capitalize">{tab} Reports</h1>
 
       <section id="unverified" className="space-y-4">
-        <h2 className="text-xl font-semibold">Unverified Reports</h2>
+        <h2 className="text-xl font-semibold">Unverified</h2>
         <div className="space-y-2">
-          {unapproved.map((r) => (
+          {data.unapproved.map((r) => (
             <Card key={`${r.id}-${r.type}`}>
               <CardHeader>
                 <CardTitle>
@@ -60,9 +83,9 @@ export default async function DashboardPage() {
       </section>
 
       <section id="verified" className="space-y-4">
-        <h2 className="text-xl font-semibold">Verified Reports</h2>
+        <h2 className="text-xl font-semibold">Verified</h2>
         <div className="space-y-2">
-          {approved.map((r) => (
+          {data.approved.map((r) => (
             <Card key={`${r.id}-${r.type}`}>
               <CardHeader>
                 <CardTitle>{r.title}</CardTitle>
