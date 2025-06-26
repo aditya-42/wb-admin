@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.13",
+    "@radix-ui/themes": "^3.2.1",
     "@supabase/supabase-js": "^2.49.10",
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
@@ -19,6 +20,7 @@
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.58.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
