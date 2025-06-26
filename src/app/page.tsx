@@ -10,7 +10,7 @@ export default function LandingPage() {
       <Header />
       <main className="container mx-auto px-4 py-20 space-y-20">
         <section className="text-center space-y-6">
-          <h1 className="text-4xl font-bold">WorldBridge Mobile</h1>
+          <h1 className="text-4xl font-bold">Radix Landing</h1>
           <p className="text-muted-foreground">
             Manage incident reports from anywhere with our mobile companion app.
           </p>
@@ -47,7 +47,7 @@ export default function LandingPage() {
         </section>
         <section id="about" className="space-y-4">
           <h2 className="text-2xl font-bold">About</h2>
-          <p>WorldBridge Mobile complements this admin portal, allowing field agents to submit and track reports effortlessly.</p>
+          <p>Radix Landing complements this admin portal, allowing field agents to submit and track reports effortlessly.</p>
         </section>
         <section id="contact" className="space-y-4">
           <h2 className="text-2xl font-bold">Contact</h2>
