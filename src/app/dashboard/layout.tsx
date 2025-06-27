@@ -1,6 +1,5 @@
 import { getCurrentAdmin } from "@/lib/auth";
 import Link from "next/link";
-import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import SidebarNav from "@/components/SidebarNav";
 import MobileNav from "@/components/MobileNav";
