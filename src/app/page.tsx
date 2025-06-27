@@ -3,7 +3,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -17,7 +16,7 @@ export default function LandingPage() {
     <>
       <Header />
 
-      <main className="container mx-auto px-4 py-20 space-y-20 text-gray-100 bg-gray-950">
+      <main className="container mx-auto px-4 py-20 space-y-20 text-gray-100">
         {/* Hero Section */}
         <section className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Text */}

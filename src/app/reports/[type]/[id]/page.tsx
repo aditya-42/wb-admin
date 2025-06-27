@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Button } from "@radix-ui/themes";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function ReportDetail({
@@ -156,7 +157,7 @@ export default async function ReportDetail({
             Attached Media
           </h2>
           <div className="flex flex-wrap gap-4">
-            {report.report_media.map((m: any, idx: number) => {
+            {report.report_media.map((m: string, idx: number) => {
               const folder = m.media_type?.startsWith("video")
                 ? "postVideos"
                 : "postImages";
@@ -165,11 +166,13 @@ export default async function ReportDetail({
                 : `https://gdhndglrjbuojsgcziyg.supabase.co/storage/v1/object/public/uploads/${folder}/${m.media_url}`;
 
               return m.media_type.startsWith("image") ? (
-                <img
+                <Image
                   key={idx}
                   src={mediaUrl}
                   alt="Media"
-                  className="w-64 h-48 object-cover rounded border border-gray-700"
+                  width={256}
+                  height={192}
+                  className="object-cover rounded border border-gray-700"
                 />
               ) : (
                 <video

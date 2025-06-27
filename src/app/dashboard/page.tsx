@@ -1,9 +1,6 @@
-import Link from "next/link";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/lib/supabaseClient";
 import { getCurrentAdmin } from "@/lib/auth";
-import DashboardClient from "@/components/DashboardClient";
-import ProfileView from "@/components/ProfileView";
+import DashboardClientWrapper from "@/components/DashboardClientWrapper";
+import { supabase } from "@/lib/supabaseClient";
 
 async function fetchReports() {
   const { data: business } = await supabase
@@ -42,11 +39,7 @@ async function fetchReports() {
   };
 }
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams?: { tab?: string };
-}) {
+export default async function DashboardPage() {
   const admin = await getCurrentAdmin();
   if (!admin) {
     return (
@@ -56,14 +49,7 @@ export default async function DashboardPage({
     );
   }
 
-  const tab = searchParams?.tab ?? "all";
-  if (tab === "profile") {
-    return <ProfileView admin={admin} />;
-  }
+  const data = await fetchReports();
 
-  const { all, business, individual } = await fetchReports();
-  const data =
-    tab === "business" ? business : tab === "individual" ? individual : all;
-
-  return <DashboardClient data={data} tab={tab} />;
+  return <DashboardClientWrapper data={data} />;
 }

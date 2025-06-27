@@ -2,7 +2,6 @@ interface ProfileViewProps {
   admin: {
     email: string;
     id: string;
-    [key: string]: any;
   };
 }
 
