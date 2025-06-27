@@ -1,6 +1,10 @@
 import { getCurrentAdmin } from "@/lib/auth";
 import Link from "next/link";
+import { headers } from "next/headers";
 import type { ReactNode } from "react";
+import SidebarNav from "@/components/SidebarNav";
+import MobileNav from "@/components/MobileNav";
+import { Button } from "@radix-ui/themes";
 
 export default async function DashboardLayout({
   children,
@@ -8,39 +12,51 @@ export default async function DashboardLayout({
   children: ReactNode;
 }) {
   const admin = await getCurrentAdmin();
+  const currentTab =
+    new URLSearchParams(headers().get("x-next-url")?.split("?")[1] ?? "").get(
+      "tab"
+    ) ?? "all";
+
+  const links = [
+    { label: "All Reports", href: "/dashboard?tab=all", tab: "all" },
+    {
+      label: "Business Reports",
+      href: "/dashboard?tab=business",
+      tab: "business",
+    },
+    {
+      label: "Individual Reports",
+      href: "/dashboard?tab=individual",
+      tab: "individual",
+    },
+    { label: "Profile", href: "/dashboard?tab=profile", tab: "profile" },
+  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-950 text-gray-100 md:flex-row">
-      <aside className="hidden w-56 bg-gray-900 p-4 space-y-4 md:block">
-        <h2 className="text-xl font-bold mb-4">Menu</h2>
-        <nav className="space-y-2">
-          <Link className="block hover:underline" href="/dashboard?tab=all">
-            All Reports
-          </Link>
-          <Link className="block hover:underline" href="/dashboard?tab=business">
-            Business Reports
-          </Link>
-          <Link className="block hover:underline" href="/dashboard?tab=individual">
-            Individual Reports
-          </Link>
-          <Link className="block hover:underline" href="/dashboard?tab=profile">
-            Profile
-          </Link>
-        </nav>
+      <aside className="hidden w-64 bg-gray-900 p-6 space-y-6 md:block border-r border-gray-800">
+        <h2 className="text-2xl font-bold mb-4 text-white">Dashboard</h2>
+        <SidebarNav />
       </aside>
+
       <div className="flex-1 flex flex-col pb-16 md:pb-0">
-        <header className="bg-gray-800 px-6 py-4 flex justify-between items-center">
-          <span>{admin?.email ?? "Admin"}</span>
-          <Link href="/logout" className="underline">Log out</Link>
+        <header className="bg-gray-800 px-6 py-4 flex justify-between items-center border-b border-gray-700">
+          <span className="text-sm text-gray-300">
+            {admin?.email ?? "Admin"}
+          </span>
+          <Button color="red">
+            <Link href="/logout" className="text-sm">
+              Log out
+            </Link>
+          </Button>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+
+        <main className="flex-1 p-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
+          {children}
+        </main>
       </div>
-      <nav className="fixed bottom-0 left-0 right-0 flex justify-around border-t bg-gray-900 py-2 md:hidden">
-        <Link href="/dashboard?tab=all" className="px-2">All</Link>
-        <Link href="/dashboard?tab=business" className="px-2">Business</Link>
-        <Link href="/dashboard?tab=individual" className="px-2">Individual</Link>
-        <Link href="/dashboard?tab=profile" className="px-2">Profile</Link>
-      </nav>
+
+      <MobileNav />
     </div>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button, Card, Flex, Heading, TextField, Text } from "@radix-ui/themes";
+import { Button, Card, Flex, TextField, Text } from "@radix-ui/themes";
+import Image from "next/image";
 
 type FormData = {
   email: string;
@@ -31,14 +32,22 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid min-h-screen md:grid-cols-2">
-      <div className="flex items-center justify-center p-8">
-        <Card className="w-full max-w-sm p-6">
+    <div className="grid min-h-screen md:grid-cols-2 bg-gray-950 text-gray-100">
+      {/* Left Side: Login Form */}
+      <div className="flex items-center justify-center p-10 bg-gray-950">
+        <Card className="w-full max-w-md p-6 border border-gray-800 bg-gray-900 space-y-6">
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-xl font-semibold text-white">Admin @</h1>
+            <Image
+              src="/logo.svg"
+              alt="App Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Flex direction="column" gap="3">
-              <Heading as="h1" size="4" align="center">
-                Admin Login
-              </Heading>
               <TextField.Root
                 type="email"
                 placeholder="Email"
@@ -64,19 +73,22 @@ export default function LoginPage() {
                   {errors.root.message}
                 </Text>
               )}
-              <Button type="submit" className="w-full">
+              <Button color="red" type="submit" className="w-full">
                 Login
               </Button>
             </Flex>
           </form>
         </Card>
       </div>
-      <div className="hidden md:flex flex-col justify-center bg-gray-900 p-10 text-gray-300">
-        <h2 className="text-3xl font-bold mb-4">WorldBridge Mobile</h2>
-        <p>
-          Access your dashboard from anywhere with our mobile app. Review and
-          verify reports on the go while staying in sync with the admin portal.
-        </p>
+
+      {/* Right Side: Fullscreen Image */}
+      <div className="relative hidden md:block">
+        <Image
+          src="/branding.svg"
+          alt="Branding"
+          fill
+          className="object-cover w-full h-full"
+        />
       </div>
     </div>
   );
