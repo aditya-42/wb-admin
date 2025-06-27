@@ -51,5 +51,5 @@ export default async function DashboardPage() {
 
   const data = await fetchReports();
 
-  return <DashboardClientWrapper data={data} />;
+  return <DashboardClientWrapper data={data} admin={admin} />;
 }
