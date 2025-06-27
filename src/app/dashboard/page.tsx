@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabaseClient";
 import { getCurrentAdmin } from "@/lib/auth";
 import DashboardClient from "@/components/DashboardClient";

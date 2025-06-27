@@ -12,25 +12,21 @@ export default async function DashboardLayout({
   children: ReactNode;
 }) {
   const admin = await getCurrentAdmin();
-  const currentTab =
-    new URLSearchParams(headers().get("x-next-url")?.split("?")[1] ?? "").get(
-      "tab"
-    ) ?? "all";
 
-  const links = [
-    { label: "All Reports", href: "/dashboard?tab=all", tab: "all" },
-    {
-      label: "Business Reports",
-      href: "/dashboard?tab=business",
-      tab: "business",
-    },
-    {
-      label: "Individual Reports",
-      href: "/dashboard?tab=individual",
-      tab: "individual",
-    },
-    { label: "Profile", href: "/dashboard?tab=profile", tab: "profile" },
-  ];
+  // const links = [
+  //   { label: "All Reports", href: "/dashboard?tab=all", tab: "all" },
+  //   {
+  //     label: "Business Reports",
+  //     href: "/dashboard?tab=business",
+  //     tab: "business",
+  //   },
+  //   {
+  //     label: "Individual Reports",
+  //     href: "/dashboard?tab=individual",
+  //     tab: "individual",
+  //   },
+  //   { label: "Profile", href: "/dashboard?tab=profile", tab: "profile" },
+  // ];
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-950 text-gray-100 md:flex-row">

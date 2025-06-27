@@ -3,7 +3,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
