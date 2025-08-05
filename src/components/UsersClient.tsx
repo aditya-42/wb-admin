@@ -86,7 +86,7 @@ export default function UsersClient({ users }: { users: User[] }) {
       </div>
 
       <div className="overflow-x-auto max-h-[500px] rounded-lg border border-gray-700">
-        <table className="w-full text-sm bg-gray-900 min-w-max">
+        <table className="w-full text-sm bg-gray-900 table-fixed">
           <thead className="bg-gray-800 text-left text-gray-300">
             <tr>
               {columns.map((col) => (
@@ -105,7 +105,7 @@ export default function UsersClient({ users }: { users: User[] }) {
                 {columns.map((col) => (
                   <td
                     key={col.key as string}
-                    className="p-3 whitespace-nowrap"
+                    className="p-3 break-words"
                   >
                     {getValue(user, col.key)}
                   </td>

@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@radix-ui/themes";
 import { supabase } from "@/lib/supabaseClient";
 
 interface Params {
@@ -48,6 +50,14 @@ export default async function UserProfile({ params }: Params) {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6 bg-gray-950 text-gray-100 min-h-screen">
+      <Button color="red">
+        <Link
+          href="/dashboard?tab=users"
+          className="inline-flex items-center gap-2 text-sm"
+        >
+          ← Back
+        </Link>
+      </Button>
       <h1 className="text-2xl font-bold">{user.username ?? "User"}</h1>
       {user.avatar_url && (
         <Image
@@ -76,6 +86,17 @@ export default async function UserProfile({ params }: Params) {
           </p>
         )}
       </div>
+      <form action={`/profile/${id}/ban`} method="POST">
+        <button
+          className={`px-4 py-2 rounded text-white ${
+            user.is_banned
+              ? "bg-green-600 hover:bg-green-500"
+              : "bg-red-600 hover:bg-red-500"
+          }`}
+        >
+          {user.is_banned ? "Unban User" : "Ban User"}
+        </button>
+      </form>
     </div>
   );
 }

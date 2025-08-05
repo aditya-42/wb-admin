@@ -5,12 +5,12 @@ import { supabase } from "@/lib/supabaseClient";
 async function fetchReports() {
     const { data: business } = await supabase
       .from("business_reports")
-      .select("*, userdetails(username, id), created_at")
+      .select("*, userdetails(username, id), categories(initials), created_at")
       .eq("is_draft", false);
 
     const { data: individual } = await supabase
       .from("individual_reports")
-      .select("*, userdetails(username, id), created_at")
+      .select("*, userdetails(username, id), categories(initials), created_at")
       .eq("is_draft", false);
 
     const taggedBusiness = (business ?? []).map((r) => ({
