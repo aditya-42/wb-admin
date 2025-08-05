@@ -39,6 +39,48 @@ async function fetchReports() {
   };
 }
 
+async function fetchUsers() {
+  const { data } = await supabase.from("userdetails").select("*");
+  if (!data) return [];
+
+  const interestIds = new Set<string>();
+  const languageIds = new Set<string>();
+  data.forEach((u) => {
+    (u.interests ?? []).forEach((id: string) => interestIds.add(id));
+    (u.language_interest ?? []).forEach((id: string) => languageIds.add(id));
+  });
+
+  const interestNames: Record<string, string> = {};
+  if (interestIds.size) {
+    const { data: interests } = await supabase
+      .from("interests")
+      .select("id, name")
+      .in("id", Array.from(interestIds));
+    interests?.forEach((i) => {
+      interestNames[i.id] = i.name;
+    });
+  }
+
+  const languageNames: Record<string, string> = {};
+  if (languageIds.size) {
+    const { data: languages } = await supabase
+      .from("languages")
+      .select("id, name")
+      .in("id", Array.from(languageIds));
+    languages?.forEach((l) => {
+      languageNames[l.id] = l.name;
+    });
+  }
+
+  return data.map((u) => ({
+    ...u,
+    interests: (u.interests ?? []).map((id: string) => interestNames[id] ?? id),
+    language_interest: (u.language_interest ?? []).map(
+      (id: string) => languageNames[id] ?? id
+    ),
+  }));
+}
+
 export default async function DashboardPage() {
   const admin = await getCurrentAdmin();
   if (!admin) {
@@ -49,7 +91,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const data = await fetchReports();
+  const [data, users] = await Promise.all([fetchReports(), fetchUsers()]);
 
-  return <DashboardClientWrapper data={data} admin={admin} />;
+  return <DashboardClientWrapper data={data} users={users} admin={admin} />;
 }
