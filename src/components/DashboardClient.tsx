@@ -5,15 +5,16 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-  interface Report {
-    id: number;
-    type: "business" | "individual";
-    title: string;
-    incident_details?: string | null;
-    verified: boolean;
-    created_at: string;
-    userdetails?: { username?: string; id?: string };
-  }
+interface Report {
+  id: number;
+  type: "business" | "individual";
+  title: string;
+  incident_details?: string | null;
+  verified: boolean;
+  created_at: string;
+  userdetails?: { username?: string; id?: string };
+  categories?: { initials?: string };
+}
 
 interface DashboardClientProps {
   data: {
@@ -31,14 +32,16 @@ export default function DashboardClient({ data, tab }: DashboardClientProps) {
   const [verifiedPage, setVerifiedPage] = useState(1);
   const router = useRouter();
 
-    const filterByQuery = (r: Report) => {
-      const query = searchQuery.toLowerCase();
-      return (
-        r.title.toLowerCase().includes(query) ||
-        (r.incident_details ?? "").toLowerCase().includes(query) ||
-        r.id.toString().includes(query)
-      );
-    };
+  const filterByQuery = (r: Report) => {
+    const query = searchQuery.toLowerCase();
+    const reportNumber = `${r.categories?.initials ?? ""}-${r.type[0].toUpperCase()}-${r.id}`;
+    return (
+      r.title.toLowerCase().includes(query) ||
+      (r.incident_details ?? "").toLowerCase().includes(query) ||
+      r.id.toString().includes(query) ||
+      reportNumber.toLowerCase().includes(query)
+    );
+  };
 
   const sortByDateDesc = (a: Report, b: Report) =>
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime();

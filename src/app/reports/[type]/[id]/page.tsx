@@ -22,7 +22,7 @@ export default async function ReportDetail({
       *,
       userdetails(username, id),
       categories(initials),
-      report_media(media_url, media_type),
+      report_media(report_media_id, media_url, media_type, media_verify),
       comments(id),
       republish_reports(id),
       likes(id)
@@ -157,34 +157,63 @@ export default async function ReportDetail({
             Attached Media
           </h2>
           <div className="flex flex-wrap gap-4">
-            {report.report_media.map((m: string, idx: number) => {
-              const folder = m.media_type?.startsWith("video")
-                ? "postVideos"
-                : "postImages";
-              const mediaUrl = m.media_url.startsWith("http")
-                ? m.media_url
-                : `https://gdhndglrjbuojsgcziyg.supabase.co/storage/v1/object/public/uploads/${folder}/${m.media_url}`;
+            {report.report_media.map(
+              (
+                m: {
+                  report_media_id: number;
+                  media_type: string;
+                  media_url: string;
+                  media_verify: boolean;
+                }
+              ) => {
+                const folder = m.media_type?.startsWith("video")
+                  ? "postVideos"
+                  : "postImages";
+                const mediaUrl = m.media_url.startsWith("http")
+                  ? m.media_url
+                  : `https://gdhndglrjbuojsgcziyg.supabase.co/storage/v1/object/public/uploads/${folder}/${m.media_url}`;
+                const action = m.media_verify ? "unverify" : "verify";
 
-              return m.media_type.startsWith("image") ? (
-                <Image
-                  key={idx}
-                  src={mediaUrl}
-                  alt="Media"
-                  width={256}
-                  height={192}
-                  className="object-cover rounded border border-gray-700"
-                />
-              ) : (
-                <video
-                  key={idx}
-                  controls
-                  className="w-64 h-48 rounded bg-black border border-gray-700"
-                >
-                  <source src={mediaUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              );
-            })}
+                return (
+                  <div
+                    key={m.report_media_id}
+                    className="flex flex-col items-start gap-2"
+                  >
+                    {m.media_type.startsWith("image") ? (
+                      <Image
+                        src={mediaUrl}
+                        alt="Media"
+                        width={256}
+                        height={192}
+                        className="object-cover rounded border border-gray-700"
+                      />
+                    ) : (
+                      <video
+                        controls
+                        className="w-64 h-48 rounded bg-black border border-gray-700"
+                      >
+                        <source src={mediaUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                    <form
+                      action={`/reports/${type}/${id}/media/${m.report_media_id}/${action}`}
+                      method="POST"
+                    >
+                      <button
+                        className={`px-2 py-1 rounded text-white ${
+                          m.media_verify
+                            ? "bg-red-600 hover:bg-red-500"
+                            : "bg-green-600 hover:bg-green-500"
+                        }`}
+                      >
+                        {m.media_verify ? "Unverify" : "Verify"}
+                      </button>
+                    </form>
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
       )}
