@@ -79,6 +79,7 @@ async function fetchUsers() {
       (id: string) => languageNames[id] ?? id
     ),
   }));
+  return data ?? [];
 }
 
 export default async function DashboardPage() {
