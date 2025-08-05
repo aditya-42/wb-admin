@@ -7,6 +7,7 @@ const links = [
   { label: "All", href: "/dashboard?tab=all", tab: "all" },
   { label: "Business", href: "/dashboard?tab=business", tab: "business" },
   { label: "Individual", href: "/dashboard?tab=individual", tab: "individual" },
+  { label: "Users", href: "/dashboard?tab=users", tab: "users" },
   { label: "Profile", href: "/dashboard?tab=profile", tab: "profile" },
 ];
 
