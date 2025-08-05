@@ -73,7 +73,7 @@ export default function UsersClient({ users }: { users: User[] }) {
         />
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-700">
+      <div className="overflow-auto max-h-[500px] rounded-lg border border-gray-700">
         <table className="w-full text-sm bg-gray-900">
           <thead className="bg-gray-800 text-left text-gray-300">
             <tr>
