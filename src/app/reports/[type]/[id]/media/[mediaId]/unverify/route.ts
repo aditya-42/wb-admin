@@ -9,7 +9,7 @@ export async function POST(
   const { error } = await supabase
     .from("report_media")
     .update({ media_verify: false })
-    .eq("report_media_id", params.mediaId);
+    .eq("id", params.mediaId);
 
   if (error) {
     return new Response("Failed to unverify media", { status: 500 });
