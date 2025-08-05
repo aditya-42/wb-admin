@@ -22,7 +22,7 @@ export default async function ReportDetail({
       *,
       userdetails(username, id),
       categories(initials),
-      report_media(report_media_id, media_url, media_type, media_verify),
+      report_media(id, media_url, media_type, media_verify),
       comments(id),
       republish_reports(id),
       likes(id)
@@ -160,7 +160,7 @@ export default async function ReportDetail({
             {report.report_media.map(
               (
                 m: {
-                  report_media_id: number;
+                  id: number;
                   media_type: string;
                   media_url: string;
                   media_verify: boolean;
@@ -176,7 +176,7 @@ export default async function ReportDetail({
 
                 return (
                   <div
-                    key={m.report_media_id}
+                    key={m.id}
                     className="flex flex-col items-start gap-2"
                   >
                     {m.media_type.startsWith("image") ? (
@@ -197,7 +197,7 @@ export default async function ReportDetail({
                       </video>
                     )}
                     <form
-                      action={`/reports/${type}/${id}/media/${m.report_media_id}/${action}`}
+                      action={`/reports/${type}/${id}/media/${m.id}/${action}`}
                       method="POST"
                     >
                       <button
