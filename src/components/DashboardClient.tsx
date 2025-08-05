@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-interface Report {
-  id: number;
-  type: "business" | "individual";
-  title: string;
-  verified: boolean;
-  created_at: string;
-  userdetails?: { username?: string };
-}
+  interface Report {
+    id: number;
+    type: "business" | "individual";
+    title: string;
+    incident_details?: string | null;
+    verified: boolean;
+    created_at: string;
+    userdetails?: { username?: string; id?: string };
+  }
 
 interface DashboardClientProps {
   data: {
@@ -29,18 +31,24 @@ export default function DashboardClient({ data, tab }: DashboardClientProps) {
   const [verifiedPage, setVerifiedPage] = useState(1);
   const router = useRouter();
 
-  const filterByTitle = (r: Report) =>
-    r.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const filterByQuery = (r: Report) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        r.title.toLowerCase().includes(query) ||
+        (r.incident_details ?? "").toLowerCase().includes(query) ||
+        r.id.toString().includes(query)
+      );
+    };
 
   const sortByDateDesc = (a: Report, b: Report) =>
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
 
-  const unverifiedFiltered = data.unapproved
-    .filter(filterByTitle)
-    .sort(sortByDateDesc);
-  const verifiedFiltered = data.approved
-    .filter(filterByTitle)
-    .sort(sortByDateDesc);
+    const unverifiedFiltered = data.unapproved
+      .filter(filterByQuery)
+      .sort(sortByDateDesc);
+    const verifiedFiltered = data.approved
+      .filter(filterByQuery)
+      .sort(sortByDateDesc);
 
   const totalUnverifiedPages = Math.ceil(unverifiedFiltered.length / PAGE_SIZE);
   const totalVerifiedPages = Math.ceil(verifiedFiltered.length / PAGE_SIZE);
@@ -78,9 +86,19 @@ export default function DashboardClient({ data, tab }: DashboardClientProps) {
                 onClick={() => router.push(`/reports/${r.type}/${r.id}`)}
               >
                 <td className="p-3 break-words max-w-[200px]">{r.title}</td>
-                <td className="p-3 break-words max-w-[200px]">
-                  {r.userdetails?.username ?? "Unknown"}
-                </td>
+                  <td className="p-3 break-words max-w-[200px]">
+                    {r.userdetails?.id ? (
+                      <Link
+                        href={`/profile/${r.userdetails.id}`}
+                        className="underline text-blue-400 hover:text-blue-300"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {r.userdetails.username ?? "Unknown"}
+                      </Link>
+                    ) : (
+                      r.userdetails?.username ?? "Unknown"
+                    )}
+                  </td>
                 <td className="p-3 break-words max-w-[200px]">
                   {new Date(r.created_at).toLocaleDateString("en-GB")} •{" "}
                   {new Date(r.created_at).toLocaleTimeString([], {
@@ -100,14 +118,14 @@ export default function DashboardClient({ data, tab }: DashboardClientProps) {
       <h1 className="text-2xl font-bold capitalize">{tab} Reports</h1>
 
       <div className="mb-6">
-        <input
-          type="text"
-          placeholder="Search reports by title..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full md:w-1/2 px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 placeholder-gray-400"
-        />
-      </div>
+          <input
+            type="text"
+            placeholder="Search reports by ID, title, or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full md:w-1/2 px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 placeholder-gray-400"
+          />
+        </div>
 
       <section id="unverified" className="space-y-4">
         <h2 className="text-xl font-semibold">Unverified</h2>

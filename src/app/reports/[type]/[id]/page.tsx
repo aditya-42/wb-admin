@@ -95,19 +95,19 @@ export default async function ReportDetail({
         <p className="text-gray-400 text-sm">
           Published on: {publishDate} • {publishTime}
         </p>
-        <p className="text-gray-400 text-sm">
-          Published by:{" "}
-          {publisherId ? (
-            <a
-              href={`/profile/${publisherId}`}
-              className="underline text-blue-400 hover:text-blue-300"
-            >
-              {publisherName}
-            </a>
-          ) : (
-            publisherName
-          )}
-        </p>
+          <p className="text-gray-400 text-sm">
+            Published by:{" "}
+            {publisherId ? (
+              <Link
+                href={`/profile/${publisherId}`}
+                className="underline text-blue-400 hover:text-blue-300"
+              >
+                {publisherName}
+              </Link>
+            ) : (
+              publisherName
+            )}
+          </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
