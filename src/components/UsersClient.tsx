@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ReactNode } from "react";
+import Image from "next/image";
 
 interface User {
   id: string;
@@ -42,8 +43,19 @@ const columns: { key: keyof User; label: string }[] = [
   { key: "city", label: "City" },
 ];
 
-function getValue(user: User, key: keyof User) {
+function getValue(user: User, key: keyof User): ReactNode {
   const value = user[key];
+  if (key === "avatar_url" && typeof value === "string" && value) {
+    return (
+      <Image
+        src={value}
+        alt={user.username ?? "Avatar"}
+        width={40}
+        height={40}
+        className="object-cover rounded-full"
+      />
+    );
+  }
   if (Array.isArray(value)) return value.join(", ");
   if (key === "created_at" && value) {
     return new Date(value).toLocaleString();
@@ -73,8 +85,8 @@ export default function UsersClient({ users }: { users: User[] }) {
         />
       </div>
 
-      <div className="overflow-auto max-h-[500px] rounded-lg border border-gray-700">
-        <table className="w-full text-sm bg-gray-900">
+      <div className="overflow-x-auto max-h-[500px] rounded-lg border border-gray-700">
+        <table className="w-full text-sm bg-gray-900 min-w-max">
           <thead className="bg-gray-800 text-left text-gray-300">
             <tr>
               {columns.map((col) => (
@@ -93,7 +105,7 @@ export default function UsersClient({ users }: { users: User[] }) {
                 {columns.map((col) => (
                   <td
                     key={col.key as string}
-                    className="p-3 break-words max-w-[200px]"
+                    className="p-3 whitespace-nowrap"
                   >
                     {getValue(user, col.key)}
                   </td>

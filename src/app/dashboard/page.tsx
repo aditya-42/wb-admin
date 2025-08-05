@@ -3,29 +3,29 @@ import DashboardClientWrapper from "@/components/DashboardClientWrapper";
 import { supabase } from "@/lib/supabaseClient";
 
 async function fetchReports() {
-  const { data: business } = await supabase
-    .from("business_reports")
-    .select("*, userdetails(username), created_at")
-    .eq("is_draft", false);
+    const { data: business } = await supabase
+      .from("business_reports")
+      .select("*, userdetails(username, id), created_at")
+      .eq("is_draft", false);
 
-  const { data: individual } = await supabase
-    .from("individual_reports")
-    .select("*, userdetails(username), created_at")
-    .eq("is_draft", false);
+    const { data: individual } = await supabase
+      .from("individual_reports")
+      .select("*, userdetails(username, id), created_at")
+      .eq("is_draft", false);
 
-  const taggedBusiness = (business ?? []).map((r) => ({
-    ...r,
-    type: "business",
-    id: r.business_report_id,
-    title: r.report_header,
-  }));
+    const taggedBusiness = (business ?? []).map((r) => ({
+      ...r,
+      type: "business",
+      id: r.business_report_id,
+      title: r.report_header,
+    }));
 
-  const taggedIndividual = (individual ?? []).map((r) => ({
-    ...r,
-    type: "individual",
-    id: r.individual_report_id,
-    title: r.report_header,
-  }));
+    const taggedIndividual = (individual ?? []).map((r) => ({
+      ...r,
+      type: "individual",
+      id: r.individual_report_id,
+      title: r.report_header,
+    }));
 
   const combine = <T extends { verified: boolean }>(items: T[]) => ({
     approved: items.filter((r) => r.verified === true),
