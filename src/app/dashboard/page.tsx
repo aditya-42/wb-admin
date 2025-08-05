@@ -39,6 +39,11 @@ async function fetchReports() {
   };
 }
 
+async function fetchUsers() {
+  const { data } = await supabase.from("userdetails").select("*");
+  return data ?? [];
+}
+
 export default async function DashboardPage() {
   const admin = await getCurrentAdmin();
   if (!admin) {
@@ -49,7 +54,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const data = await fetchReports();
+  const [data, users] = await Promise.all([fetchReports(), fetchUsers()]);
 
-  return <DashboardClientWrapper data={data} admin={admin} />;
+  return <DashboardClientWrapper data={data} users={users} admin={admin} />;
 }

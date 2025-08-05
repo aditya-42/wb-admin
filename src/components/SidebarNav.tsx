@@ -15,6 +15,7 @@ const links = [
     href: "/dashboard?tab=individual",
     tab: "individual",
   },
+  { label: "Users", href: "/dashboard?tab=users", tab: "users" },
   { label: "Profile", href: "/dashboard?tab=profile", tab: "profile" },
 ];
 
