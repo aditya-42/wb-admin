@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@radix-ui/themes";
+import BanUserButton from "@/components/BanUserButton";
 
 interface ProfilePageProps {
   params: { id: string };
@@ -84,14 +86,26 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6 bg-gray-950 text-gray-100 min-h-screen">
-      <Button color="red">
+      <Button color="red" className="mb-4">
         <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm">
           ← Back to Dashboard
         </Link>
       </Button>
 
       <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 space-y-4">
-        <h1 className="text-2xl font-bold text-white">User Profile</h1>
+        <div className="flex items-center gap-4">
+          <Image
+            src={user.avatar_url || "/branding.svg"}
+            alt="Profile image"
+            width={96}
+            height={96}
+            className="rounded-full object-cover w-24 h-24"
+          />
+          <h1 className="text-2xl font-bold text-white">User Profile</h1>
+          <div className="ml-auto">
+            <BanUserButton userId={user.id} />
+          </div>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {infoFields.map((field) => (
             <div key={field.label}>
