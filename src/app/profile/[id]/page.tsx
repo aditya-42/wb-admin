@@ -106,7 +106,6 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
             <BanUserButton userId={user.id} />
           </div>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {infoFields.map((field) => (
             <div key={field.label}>
