@@ -6,9 +6,9 @@ import Link from "next/link";
 export default async function ReportDetail({
   params,
 }: {
-  params: { type: string; id: string };
+  params: Promise<{ type: string; id: string }>;
 }) {
-  const { type, id } = params;
+  const { type, id } = await params;
   const isBusiness = type === "business";
   const reportId = Number(id);
 

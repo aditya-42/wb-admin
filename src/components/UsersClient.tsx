@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -22,24 +23,12 @@ interface User {
   city: string | null;
 }
 
+// Display only a small subset of user information in the table
 const columns: { key: keyof User; label: string }[] = [
-  { key: "id", label: "ID" },
   { key: "username", label: "Username" },
   { key: "email", label: "Email" },
   { key: "phone", label: "Phone" },
   { key: "created_at", label: "Created At" },
-  { key: "interests", label: "Interests" },
-  { key: "language_interest", label: "Language Interest" },
-  { key: "first_name", label: "First Name" },
-  { key: "last_name", label: "Last Name" },
-  { key: "avatar_url", label: "Avatar URL" },
-  { key: "about", label: "About" },
-  { key: "occupation", label: "Occupation" },
-  { key: "area_of_expertise", label: "Area of Expertise" },
-  { key: "tagline", label: "Tagline" },
-  { key: "country", label: "Country" },
-  { key: "state", label: "State" },
-  { key: "city", label: "City" },
 ];
 
 function getValue(user: User, key: keyof User) {
@@ -53,6 +42,7 @@ function getValue(user: User, key: keyof User) {
 
 export default function UsersClient({ users }: { users: User[] }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
   const filtered = users.filter(
     (u) =>
       (u.username || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -88,7 +78,8 @@ export default function UsersClient({ users }: { users: User[] }) {
             {filtered.map((user) => (
               <tr
                 key={user.id}
-                className="border-t border-gray-800 hover:bg-gray-800 transition"
+                onClick={() => router.push(`/profile/${user.id}`)}
+                className="cursor-pointer border-t border-gray-800 hover:bg-gray-800 transition"
               >
                 {columns.map((col) => (
                   <td
