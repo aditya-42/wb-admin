@@ -2,11 +2,17 @@
 
 import { Button } from "@radix-ui/themes";
 
-export default function BanUserButton({ userId }: { userId: string }) {
+interface BanUserButtonProps {
+  userId: string;
+  banned: boolean;
+}
+
+export default function BanUserButton({ userId, banned }: BanUserButtonProps) {
   const handleBan = async () => {
     const res = await fetch(`/profile/${userId}/ban`, { method: "POST" });
     if (res.ok) {
       alert("User banned successfully");
+      window.location.reload();
     } else {
       const data = await res.json().catch(() => null);
       alert(data?.error || "Failed to ban user");
@@ -14,7 +20,11 @@ export default function BanUserButton({ userId }: { userId: string }) {
   };
 
   return (
-    <Button color="red" onClick={handleBan}>
+    <Button
+      color={banned ? "gray" : "red"}
+      onClick={handleBan}
+      disabled={banned}
+    >
       Ban User
     </Button>
   );
