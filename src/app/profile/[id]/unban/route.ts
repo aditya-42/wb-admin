@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+
+export const runtime = "nodejs";
 
 
 export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const { error } = await supabase.rpc("admin_unban_user", { user_id: params.id });
+
+  const { error } = await supabaseAdmin.auth.admin.updateUserById(params.id, {
+    ban_duration: "none",
+  });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
