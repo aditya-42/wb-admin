@@ -7,6 +7,7 @@ export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+ 
   const { error } = await supabaseAdmin.auth.admin.updateUserById(params.id, {
     ban_duration: "none",
   });
