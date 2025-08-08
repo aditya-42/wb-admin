@@ -152,10 +152,8 @@ export default async function ReportDetail({
       </div>
 
       {report.report_media?.length > 0 && (
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">
-            Attached Media
-          </h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-white">Attached Media</h2>
           <div className="flex flex-wrap gap-4">
             {report.report_media.map((m: string, idx: number) => {
               const folder = m.media_type?.startsWith("video")
@@ -186,6 +184,14 @@ export default async function ReportDetail({
               );
             })}
           </div>
+          <form
+            action={`/reports/${type}/${id}/verify-media?state=${report.media_verified}`}
+            method="POST"
+          >
+            <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">
+              {report.media_verified ? "Unverify Media" : "Verify Media"}
+            </button>
+          </form>
         </div>
       )}
 
