@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@radix-ui/themes";
 import BanUserButton from "@/components/BanUserButton";
+import UnbanUserButton from "@/components/UnbanUserButton";
 
 interface ProfilePageProps {
   params: { id: string };
@@ -102,9 +103,10 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
             className="rounded-full object-cover w-24 h-24"
           />
           <h1 className="text-2xl font-bold text-white">User Profile</h1>
-          <div className="ml-auto">
-            <BanUserButton userId={user.id} />
-          </div>
+            <div className="ml-auto flex gap-2">
+              <BanUserButton userId={user.id} />
+              <UnbanUserButton userId={user.id} />
+            </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {infoFields.map((field) => (
