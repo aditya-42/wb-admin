@@ -5,12 +5,12 @@ import { supabase } from "@/lib/supabaseClient";
 async function fetchReports() {
   const { data: business } = await supabase
     .from("business_reports")
-    .select("*, userdetails(username), created_at")
+    .select("*, userdetails(username), categories(initials), created_at")
     .eq("is_draft", false);
 
   const { data: individual } = await supabase
     .from("individual_reports")
-    .select("*, userdetails(username), created_at")
+    .select("*, userdetails(username), categories(initials), created_at")
     .eq("is_draft", false);
 
   const taggedBusiness = (business ?? []).map((r) => ({
@@ -18,6 +18,8 @@ async function fetchReports() {
     type: "business",
     id: r.business_report_id,
     title: r.report_header,
+    name: r.business_name,
+    reportNumber: `${r.categories?.initials ?? "###"}-B-${r.business_report_id}`,
   }));
 
   const taggedIndividual = (individual ?? []).map((r) => ({
@@ -25,6 +27,8 @@ async function fetchReports() {
     type: "individual",
     id: r.individual_report_id,
     title: r.report_header,
+    name: r.full_name,
+    reportNumber: `${r.categories?.initials ?? "###"}-I-${r.individual_report_id}`,
   }));
 
   const combine = <T extends { verified: boolean }>(items: T[]) => ({

@@ -10,6 +10,8 @@ interface Report {
   title: string;
   verified: boolean;
   created_at: string;
+  name?: string;
+  reportNumber?: string;
   userdetails?: { username?: string };
 }
 
@@ -29,17 +31,26 @@ export default function DashboardClient({ data, tab }: DashboardClientProps) {
   const [verifiedPage, setVerifiedPage] = useState(1);
   const router = useRouter();
 
-  const filterByTitle = (r: Report) =>
-    r.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const filterByQuery = (r: Report) => {
+    const query = searchQuery.toLowerCase();
+    const fields = [
+      r.title,
+      r.name,
+      r.reportNumber,
+      r.userdetails?.username,
+      String(r.id),
+    ].filter(Boolean) as string[];
+    return fields.some((f) => f.toLowerCase().includes(query));
+  };
 
   const sortByDateDesc = (a: Report, b: Report) =>
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
 
   const unverifiedFiltered = data.unapproved
-    .filter(filterByTitle)
+    .filter(filterByQuery)
     .sort(sortByDateDesc);
   const verifiedFiltered = data.approved
-    .filter(filterByTitle)
+    .filter(filterByQuery)
     .sort(sortByDateDesc);
 
   const totalUnverifiedPages = Math.ceil(unverifiedFiltered.length / PAGE_SIZE);
@@ -102,7 +113,7 @@ export default function DashboardClient({ data, tab }: DashboardClientProps) {
       <div className="mb-6">
         <input
           type="text"
-          placeholder="Search reports by title..."
+          placeholder="Search by title, name, report number, or user..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full md:w-1/2 px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 placeholder-gray-400"
