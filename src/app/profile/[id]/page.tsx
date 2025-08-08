@@ -93,7 +93,7 @@ export default async function UserProfilePage({ params }: ProfilePageProps) {
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-8 bg-gray-950 text-gray-100 min-h-screen">
       <Button asChild color="red" variant="outline">
-        <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm">
+        <Link href="/dashboard?tab=users" className="inline-flex items-center gap-2 text-sm">
           ← Back to Dashboard
         </Link>
       </Button>
